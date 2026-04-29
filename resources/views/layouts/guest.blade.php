@@ -11,6 +11,8 @@
     @include('layouts.partials.tailwind-cdn')
     @if (file_exists(public_path('build/manifest.json')))
         @vite(['resources/js/app.js'])
+    @else
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @endif
 </head>
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">

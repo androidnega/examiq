@@ -58,6 +58,41 @@
     @include('layouts.partials.tailwind-cdn')
     @if (file_exists(public_path('build/manifest.json')))
         @vite(['resources/js/app.js'])
+    @else
+        <script>
+            window.examiqSidebar = window.examiqSidebar || function () {
+                return {
+                    collapsed: false,
+                    init() {
+                        try {
+                            this.collapsed = localStorage.getItem('examiq_sidebar_collapsed_v2') === '1';
+                        } catch (_) {
+                            this.collapsed = false;
+                        }
+                    },
+                    toggle() {
+                        this.collapsed = !this.collapsed;
+                        try {
+                            localStorage.setItem('examiq_sidebar_collapsed_v2', this.collapsed ? '1' : '0');
+                        } catch (_) {
+                            // ignore storage errors
+                        }
+                    },
+                };
+            };
+            window.examiqProfileMenu = window.examiqProfileMenu || function () {
+                return {
+                    open: false,
+                    toggle() {
+                        this.open = !this.open;
+                    },
+                    close() {
+                        this.open = false;
+                    },
+                };
+            };
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @endif
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
