@@ -1,7 +1,7 @@
 @extends('layouts.app', ['header' => __('Submission session options')])
 
 @section('content')
-    <div class="mx-auto max-w-3xl space-y-6">
+    <div class="w-full space-y-6">
         <p class="text-sm text-slate-500">
             {{ __('Manage the centralized list for academic years and semesters. Lecturers can only select from these options.') }}
         </p>
