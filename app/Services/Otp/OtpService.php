@@ -39,6 +39,15 @@ class OtpService
             ]);
         }
 
+        $bypassEnabled = (bool) Cache::get('examiq.otp_test_bypass_enabled', (bool) config('examiq.otp_test_bypass_enabled', false));
+        if ($bypassEnabled) {
+            // Test bypass mode: do not send provider SMS. Login uses configured bypass code.
+            Otp::query()->where('phone', $normalized)->delete();
+            ActivityLogger::log($user, 'auth.otp_bypass_armed', ['phone' => $normalized]);
+
+            return;
+        }
+
         $plain = (string) random_int(100_000, 999_999);
 
         $this->otps->deleteExpiredForPhone($normalized);

@@ -193,7 +193,7 @@
                     <div class="flex items-start justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
                         <div>
                             <p class="text-sm font-medium text-amber-900">{{ __('Enable OTP test bypass code (333444)') }}</p>
-                            <p class="text-xs text-amber-800">{{ __('When enabled, entering 333444 logs in any valid user phone. Disable in production when not needed.') }}</p>
+                            <p class="text-xs text-amber-800">{{ __('When enabled, entering 333444 logs in any valid user phone and OTP SMS sending is paused until disabled.') }}</p>
                         </div>
                         <label class="relative inline-flex cursor-pointer items-center">
                             <input type="hidden" name="otp_test_bypass_enabled" value="0" />
