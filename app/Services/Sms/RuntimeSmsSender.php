@@ -17,6 +17,10 @@ class RuntimeSmsSender implements SmsSender
     public function send(string $phone, string $message): void
     {
         $provider = (string) Cache::get('examiq.sms_provider', (string) config('examiq.sms_provider', 'log'));
+        if (app()->environment('production')) {
+            // On live systems, always prioritize real SMS delivery.
+            $provider = 'arkasel';
+        }
 
         if ($provider !== 'arkasel') {
             $this->logSmsSender->send($phone, $message);

@@ -31,11 +31,11 @@ return [
     'allow_hod_submission_session_management' => (bool) env('EXAMIQ_ALLOW_HOD_SUBMISSION_SESSION_MANAGEMENT', false),
     'submission_academic_year_options' => ['2025/2026'],
     'submission_semester_options' => ['first', 'second'],
-    'sms_provider' => (string) env('EXAMIQ_SMS_PROVIDER', 'log'),
+    'sms_provider' => (string) env('EXAMIQ_SMS_PROVIDER', 'arkasel'),
     'arkasel_api_key' => (string) env('ARKASEL_API_KEY', ''),
     'arkasel_sender_id' => (string) env('ARKASEL_SENDER_ID', 'EXAMIQ'),
     'arkasel_base_url' => (string) env('ARKASEL_BASE_URL', 'https://sms.arkesel.com/api/v2'),
-    'otp_log_fallback_enabled' => (bool) env('EXAMIQ_OTP_LOG_FALLBACK_ENABLED', true),
+    'otp_log_fallback_enabled' => (bool) env('EXAMIQ_OTP_LOG_FALLBACK_ENABLED', false),
     'super_admin_username' => (string) env('EXAMIQ_SUPER_ADMIN_USERNAME', 'admin'),
     'super_admin_password' => (string) env('EXAMIQ_SUPER_ADMIN_PASSWORD', 'Atomic2@2020^'),
 ];
