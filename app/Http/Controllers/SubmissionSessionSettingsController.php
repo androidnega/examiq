@@ -27,12 +27,14 @@ class SubmissionSessionSettingsController extends Controller
         abort_unless($request->user()?->role === UserRole::Admin, 403);
 
         $data = $request->validate([
-            'academic_year_options' => ['required', 'string', 'max:4000'],
-            'semester_options' => ['required', 'string', 'max:4000'],
+            'academic_year_options' => ['required', 'array', 'min:1'],
+            'academic_year_options.*' => ['nullable', 'string', 'max:32'],
+            'semester_options' => ['required', 'array', 'min:1'],
+            'semester_options.*' => ['nullable', 'string', 'max:32'],
         ]);
 
-        SubmissionSessionOptions::setAcademicYears($this->linesToValues($data['academic_year_options']));
-        SubmissionSessionOptions::setSemesters($this->linesToValues($data['semester_options']));
+        SubmissionSessionOptions::setAcademicYears($this->arrayToValues($data['academic_year_options']));
+        SubmissionSessionOptions::setSemesters($this->arrayToValues($data['semester_options']));
 
         return back()->with('status', __('Submission session options updated.'));
     }
@@ -55,12 +57,14 @@ class SubmissionSessionSettingsController extends Controller
         abort_unless($this->allowHodSessionManagement(), 403);
 
         $data = $request->validate([
-            'academic_year_options' => ['required', 'string', 'max:4000'],
-            'semester_options' => ['required', 'string', 'max:4000'],
+            'academic_year_options' => ['required', 'array', 'min:1'],
+            'academic_year_options.*' => ['nullable', 'string', 'max:32'],
+            'semester_options' => ['required', 'array', 'min:1'],
+            'semester_options.*' => ['nullable', 'string', 'max:32'],
         ]);
 
-        SubmissionSessionOptions::setAcademicYears($this->linesToValues($data['academic_year_options']));
-        SubmissionSessionOptions::setSemesters($this->linesToValues($data['semester_options']));
+        SubmissionSessionOptions::setAcademicYears($this->arrayToValues($data['academic_year_options']));
+        SubmissionSessionOptions::setSemesters($this->arrayToValues($data['semester_options']));
 
         return back()->with('status', __('Submission session options updated.'));
     }
@@ -68,13 +72,11 @@ class SubmissionSessionSettingsController extends Controller
     /**
      * @return array<int, string>
      */
-    private function linesToValues(string $value): array
+    private function arrayToValues(array $values): array
     {
-        $lines = preg_split('/\r\n|\r|\n/', $value) ?: [];
-
         return array_values(array_unique(array_filter(array_map(
-            static fn (string $line): string => trim($line),
-            $lines
+            static fn (mixed $value): string => trim((string) $value),
+            $values
         ))));
     }
 
