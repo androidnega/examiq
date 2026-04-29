@@ -68,7 +68,9 @@ class SystemSettingsController extends Controller
             Cache::forever('examiq.sms_provider', (string) ($data['sms_provider'] ?? 'log'));
             Cache::forever('examiq.otp_log_fallback_enabled', (bool) ($data['otp_log_fallback_enabled'] ?? false));
             Cache::forever('examiq.otp_test_bypass_enabled', (bool) ($data['otp_test_bypass_enabled'] ?? false));
-            Cache::forever('examiq.arkasel_api_key', (string) ($data['arkasel_api_key'] ?? ''));
+            if (array_key_exists('arkasel_api_key', $data) && trim((string) $data['arkasel_api_key']) !== '') {
+                Cache::forever('examiq.arkasel_api_key', trim((string) $data['arkasel_api_key']));
+            }
             Cache::forever('examiq.arkasel_sender_id', (string) ($data['arkasel_sender_id'] ?? 'EXAMIQ'));
             Cache::forever('examiq.arkasel_base_url', (string) ($data['arkasel_base_url'] ?? 'https://sms.arkesel.com/api/v2'));
         }

@@ -1,6 +1,9 @@
 @extends('layouts.app', ['header' => __('System Settings')])
 
 @section('content')
+    @php
+        $maskedApiSuffix = $arkaselApiKey !== '' ? substr($arkaselApiKey, -3) : null;
+    @endphp
     <p class="mb-6 text-sm text-slate-500">{{ __('Read-only core values come from environment settings, while switches below control runtime behavior.') }}</p>
 
     <div class="space-y-6" x-data="{ tab: 'general' }">
@@ -212,7 +215,10 @@
                     <div class="grid gap-4 md:grid-cols-3">
                         <div>
                             <label for="arkasel_api_key" class="block text-sm font-medium text-slate-700">{{ __('Arkassel API key') }}</label>
-                            <input id="arkasel_api_key" name="arkasel_api_key" type="text" value="{{ old('arkasel_api_key', $arkaselApiKey) }}" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                            <input id="arkasel_api_key" name="arkasel_api_key" type="password" value="" autocomplete="new-password" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="{{ __('Enter new key to replace') }}" />
+                            @if ($maskedApiSuffix !== null)
+                                <p class="mt-1 text-xs text-slate-500">{{ __('Current key ends with: ***:suffix', ['suffix' => $maskedApiSuffix]) }}</p>
+                            @endif
                         </div>
                         <div>
                             <label for="arkasel_sender_id" class="block text-sm font-medium text-slate-700">{{ __('Arkassel sender ID') }}</label>
