@@ -1,0 +1,12 @@
+---
+description: Run Laravel migrations automatically when the database schema changes
+alwaysApply: true
+---
+
+# Database migrations
+
+- After **adding or editing** files under `database/migrations/`, run pending migrations without asking the user:
+  - Local / dev: `php artisan migrate`
+  - Non-interactive or when the DB might be briefly unavailable: `php artisan migrate --graceful`
+- If a change **requires** `migrate:fresh` or destructive steps, say so in the task summary and only use those when the user’s data loss risk is acceptable (e.g. local dev).
+- After migration-related work, prefer running `php artisan migrate` once to confirm the app boots against the current schema.

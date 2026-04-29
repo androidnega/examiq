@@ -1,0 +1,34 @@
+Examiq - seeded users by privilege (super admin excluded)
+========================================================================
+
+Sign-in for normal users: use phone number on /
+Seeded password (if used by tooling): password123
+
+1) HOD privilege
+Name:        Dr. Kwame Mensah
+Phone:       0241000001
+Role:        hod
+Department:  Computer Science
+Blocked:     no
+------------------------------------------------------------------------
+2) Lecturer privilege
+Name:        Mr. Kofi Asare
+Phone:       0242000001
+Role:        lecturer
+Department:  Computer Science
+Blocked:     no
+------------------------------------------------------------------------
+3) Moderator privilege
+Name:        Dr. Nana Adu
+Phone:       0243000001
+Role:        moderator
+Department:  Computer Science
+Blocked:     no
+------------------------------------------------------------------------
+4) Exam officer privilege
+Name:        Mr. Daniel Tetteh
+Phone:       0244000000
+Role:        exam_officer
+Department:  -
+Blocked:     no
+------------------------------------------------------------------------
