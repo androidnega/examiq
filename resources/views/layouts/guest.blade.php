@@ -9,7 +9,9 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet">
     @stack('head')
     @include('layouts.partials.tailwind-cdn')
-    @vite(['resources/js/app.js'])
+    @if (file_exists(public_path('build/manifest.json')))
+        @vite(['resources/js/app.js'])
+    @endif
 </head>
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
     @yield('content')

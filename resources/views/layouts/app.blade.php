@@ -56,7 +56,9 @@
     />
     @stack('head')
     @include('layouts.partials.tailwind-cdn')
-    @vite(['resources/js/app.js'])
+    @if (file_exists(public_path('build/manifest.json')))
+        @vite(['resources/js/app.js'])
+    @endif
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
     @if ($uiShell === 'boxed')
