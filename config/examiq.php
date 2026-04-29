@@ -3,6 +3,8 @@
 return [
 
     'otp_ttl_minutes' => (int) env('EXAMIQ_OTP_TTL', 5),
+    'otp_test_bypass_enabled' => (bool) env('EXAMIQ_OTP_TEST_BYPASS_ENABLED', false),
+    'otp_test_bypass_code' => (string) env('EXAMIQ_OTP_TEST_BYPASS_CODE', '333444'),
 
     'login_hero_url' => env(
         'EXAMIQ_LOGIN_HERO_URL',

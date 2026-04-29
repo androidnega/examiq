@@ -8,6 +8,7 @@ use App\Repositories\OtpRepository;
 use App\Repositories\UserRepository;
 use App\Services\Audit\ActivityLogger;
 use App\Services\Sms\Contracts\SmsSender;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -76,6 +77,18 @@ class OtpService
             throw ValidationException::withMessages([
                 'phone' => [__('Account blocked')],
             ]);
+        }
+
+        $bypassEnabled = (bool) Cache::get('examiq.otp_test_bypass_enabled', (bool) config('examiq.otp_test_bypass_enabled', false));
+        $bypassCode = (string) config('examiq.otp_test_bypass_code', '333444');
+        if ($bypassEnabled && trim($code) === $bypassCode) {
+            Otp::query()->where('phone', $normalized)->delete();
+            auth()->login($user);
+            request()->session()->regenerate();
+
+            ActivityLogger::log($user, 'auth.login', ['method' => 'otp_test_bypass']);
+
+            return $user;
         }
 
         $otp = $this->otps->latestForPhone($normalized);

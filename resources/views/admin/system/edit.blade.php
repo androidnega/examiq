@@ -190,6 +190,25 @@
                         </div>
                     </div>
 
+                    <div class="flex items-start justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+                        <div>
+                            <p class="text-sm font-medium text-amber-900">{{ __('Enable OTP test bypass code (333444)') }}</p>
+                            <p class="text-xs text-amber-800">{{ __('When enabled, entering 333444 logs in any valid user phone. Disable in production when not needed.') }}</p>
+                        </div>
+                        <label class="relative inline-flex cursor-pointer items-center">
+                            <input type="hidden" name="otp_test_bypass_enabled" value="0" />
+                            <input
+                                type="checkbox"
+                                name="otp_test_bypass_enabled"
+                                value="1"
+                                class="peer sr-only"
+                                @checked(old('otp_test_bypass_enabled', $otpTestBypassEnabled))
+                            />
+                            <span class="h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-amber-500"></span>
+                            <span class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition peer-checked:translate-x-5"></span>
+                        </label>
+                    </div>
+
                     <div class="grid gap-4 md:grid-cols-3">
                         <div>
                             <label for="arkasel_api_key" class="block text-sm font-medium text-slate-700">{{ __('Arkassel API key') }}</label>

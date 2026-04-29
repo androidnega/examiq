@@ -26,6 +26,7 @@ class SystemSettingsController extends Controller
             ),
             'smsProvider' => Cache::get('examiq.sms_provider', (string) config('examiq.sms_provider', 'log')),
             'otpLogFallbackEnabled' => Cache::get('examiq.otp_log_fallback_enabled', (bool) config('examiq.otp_log_fallback_enabled', true)),
+            'otpTestBypassEnabled' => Cache::get('examiq.otp_test_bypass_enabled', (bool) config('examiq.otp_test_bypass_enabled', false)),
             'arkaselApiKey' => Cache::get('examiq.arkasel_api_key', (string) config('examiq.arkasel_api_key', '')),
             'arkaselSenderId' => Cache::get('examiq.arkasel_sender_id', (string) config('examiq.arkasel_sender_id', 'EXAMIQ')),
             'arkaselBaseUrl' => Cache::get('examiq.arkasel_base_url', (string) config('examiq.arkasel_base_url', 'https://sms.arkesel.com/api/v2')),
@@ -47,6 +48,7 @@ class SystemSettingsController extends Controller
             'allow_hod_submission_session_management' => ['nullable', 'boolean'],
             'sms_provider' => ['nullable', 'string', 'in:log,arkasel'],
             'otp_log_fallback_enabled' => ['nullable', 'boolean'],
+            'otp_test_bypass_enabled' => ['nullable', 'boolean'],
             'arkasel_api_key' => ['nullable', 'string', 'max:255'],
             'arkasel_sender_id' => ['nullable', 'string', 'max:64'],
             'arkasel_base_url' => ['nullable', 'url', 'max:255'],
@@ -65,6 +67,7 @@ class SystemSettingsController extends Controller
             Cache::forever('examiq.allow_hod_submission_session_management', (bool) ($data['allow_hod_submission_session_management'] ?? false));
             Cache::forever('examiq.sms_provider', (string) ($data['sms_provider'] ?? 'log'));
             Cache::forever('examiq.otp_log_fallback_enabled', (bool) ($data['otp_log_fallback_enabled'] ?? false));
+            Cache::forever('examiq.otp_test_bypass_enabled', (bool) ($data['otp_test_bypass_enabled'] ?? false));
             Cache::forever('examiq.arkasel_api_key', (string) ($data['arkasel_api_key'] ?? ''));
             Cache::forever('examiq.arkasel_sender_id', (string) ($data['arkasel_sender_id'] ?? 'EXAMIQ'));
             Cache::forever('examiq.arkasel_base_url', (string) ($data['arkasel_base_url'] ?? 'https://sms.arkesel.com/api/v2'));
