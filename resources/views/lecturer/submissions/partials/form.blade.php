@@ -86,19 +86,22 @@
         </div>
     </div>
 
-    <div class="rounded-xl border border-gray-200 bg-white p-6">
+    <div class="rounded-xl border border-gray-200 bg-white p-4">
         <h2 class="text-sm font-semibold text-gray-900">{{ __('Exam materials (PDF)') }}</h2>
         <p class="mt-1 text-xs text-gray-500">{{ __('PDF only. Maximum 1 MB per file. Required documents must be included.') }}</p>
 
-        <div class="mt-5 space-y-5">
+        <div class="mt-4 grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
             @foreach ([
                 'file_questions' => __('Exam questions'),
                 'file_marking_scheme' => __('Marking scheme'),
                 'file_outline' => __('Course outline'),
             ] as $name => $label)
-                <div>
-                    <p class="text-sm font-medium text-gray-800">{{ $label }} <span class="text-red-600">*</span></p>
-                    <div class="js-dropzone mt-2 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-6 text-center transition-colors hover:border-gray-400 hover:bg-gray-50/80">
+                <div class="rounded-lg border border-gray-200 bg-gray-50/50 p-3">
+                    <p class="flex items-center gap-2 text-sm font-medium text-gray-800">
+                        <i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i>
+                        <span>{{ $label }} <span class="text-red-600">*</span></span>
+                    </p>
+                    <div class="js-dropzone mt-2 rounded-lg border border-dashed border-gray-300 bg-white px-3 py-4 text-center transition-colors hover:border-gray-400 hover:bg-gray-50/80">
                         <input type="file" name="{{ $name }}" id="{{ $name }}_input" accept="application/pdf,.pdf" class="sr-only" />
                         <label for="{{ $name }}_input" class="cursor-pointer text-sm text-gray-600">
                             <span class="js-dropzone-label font-medium text-gray-700" data-default="{{ __('Drop PDF here or click to browse') }}">{{ __('Drop PDF here or click to browse') }}</span>
@@ -111,9 +114,12 @@
                 </div>
             @endforeach
 
-            <div>
-                <p class="text-sm font-medium text-gray-800">{{ __('Supporting document') }} <span class="text-gray-400">({{ __('optional') }})</span></p>
-                <div class="js-dropzone mt-2 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-6 text-center transition-colors hover:border-gray-400">
+            <div class="rounded-lg border border-gray-200 bg-gray-50/50 p-3">
+                <p class="flex items-center gap-2 text-sm font-medium text-gray-800">
+                    <i class="fa-solid fa-paperclip text-slate-500" aria-hidden="true"></i>
+                    <span>{{ __('Supporting document') }} <span class="text-gray-400">({{ __('optional') }})</span></span>
+                </p>
+                <div class="js-dropzone mt-2 rounded-lg border border-dashed border-gray-300 bg-white px-3 py-4 text-center transition-colors hover:border-gray-400">
                     <input type="file" name="file_supporting" id="file_supporting_input" accept="application/pdf,.pdf" class="sr-only" />
                     <label for="file_supporting_input" class="cursor-pointer text-sm text-gray-600">
                         <span class="js-dropzone-label font-medium text-gray-700" data-default="{{ __('Drop PDF here or click to browse') }}">{{ __('Drop PDF here or click to browse') }}</span>
