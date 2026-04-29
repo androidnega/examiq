@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Sms\ArkaselSmsSender;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 use Illuminate\View\View;
 
 class SystemSettingsController extends Controller
@@ -71,5 +73,30 @@ class SystemSettingsController extends Controller
         return redirect()
             ->route('dashboard.system.edit')
             ->with('status', __('System settings saved. Core app values remain in your environment file.'));
+    }
+
+    public function testSms(Request $request, ArkaselSmsSender $arkaselSmsSender): RedirectResponse
+    {
+        abort_unless($request->user()?->isSuperAdmin(), 403);
+
+        $data = $request->validate([
+            'test_sms_phone' => ['required', 'string', 'max:32'],
+            'test_sms_message' => ['nullable', 'string', 'max:480'],
+        ]);
+
+        $message = trim((string) ($data['test_sms_message'] ?? ''));
+        if ($message === '') {
+            $message = 'EXAMIQ test SMS from system settings at '.now()->format('Y-m-d H:i:s');
+        }
+
+        try {
+            $arkaselSmsSender->send((string) $data['test_sms_phone'], $message);
+        } catch (Throwable $e) {
+            return back()->withErrors([
+                'test_sms_phone' => __('Arkassel test failed: :error', ['error' => $e->getMessage()]),
+            ]);
+        }
+
+        return back()->with('status', __('Arkassel test SMS sent successfully.'));
     }
 }

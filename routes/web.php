@@ -110,6 +110,7 @@ Route::middleware(['auth', 'not.blocked'])->group(function (): void {
 
                 Route::get('/system', [SystemSettingsController::class, 'edit'])->name('system.edit');
                 Route::put('/system', [SystemSettingsController::class, 'update'])->name('system.update');
+                Route::post('/system/test-sms', [SystemSettingsController::class, 'testSms'])->name('system.test-sms');
                 Route::post('/system/reset-data', SystemDataResetController::class)->name('system.reset-data');
                 Route::get('/system/session-options', [SubmissionSessionSettingsController::class, 'editForAdmin'])->name('system.session-options.edit');
                 Route::put('/system/session-options', [SubmissionSessionSettingsController::class, 'updateForAdmin'])->name('system.session-options.update');

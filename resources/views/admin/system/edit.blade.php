@@ -201,6 +201,28 @@
                                 <input id="arkasel_base_url" name="arkasel_base_url" type="url" value="{{ old('arkasel_base_url', $arkaselBaseUrl) }}" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
                             </div>
                         </div>
+
+                        <div class="rounded-lg border border-slate-200 bg-white p-3">
+                            <p class="text-sm font-medium text-slate-900">{{ __('Arkassel live test') }}</p>
+                            <p class="text-xs text-slate-500">{{ __('Send a real SMS from this server using current Arkassel credentials.') }}</p>
+                            <form method="post" action="{{ route('dashboard.system.test-sms') }}" class="mt-3 grid gap-3 md:grid-cols-3">
+                                @csrf
+                                <div>
+                                    <label for="test_sms_phone" class="block text-xs font-medium text-slate-600">{{ __('Destination phone') }}</label>
+                                    <input id="test_sms_phone" name="test_sms_phone" type="text" value="{{ old('test_sms_phone') }}" placeholder="0240000000" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                                    @error('test_sms_phone')
+                                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="test_sms_message" class="block text-xs font-medium text-slate-600">{{ __('Message (optional)') }}</label>
+                                    <input id="test_sms_message" name="test_sms_message" type="text" value="{{ old('test_sms_message') }}" placeholder="{{ __('EXAMIQ test message') }}" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+                                </div>
+                                <div class="md:col-span-3">
+                                    <x-button type="submit" variant="secondary">{{ __('Send Arkassel test SMS') }}</x-button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endif
