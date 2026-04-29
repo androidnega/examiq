@@ -1,5 +1,6 @@
 @php
     use App\Enums\UserRole;
+    use Illuminate\Support\Facades\Cache;
 
     $role = auth()->user()->role;
     $roleEnum = $role instanceof UserRole ? $role : UserRole::tryFrom((string) $role);
@@ -38,6 +39,20 @@
 
             <ul class="space-y-0.5">
                 @foreach ($section['items'] ?? [] as $item)
+                    @php
+                        $visibleIf = $item['visible_if'] ?? null;
+                        $isVisible = match ($visibleIf) {
+                            'super_admin' => auth()->user()?->isSuperAdmin() ?? false,
+                            'hod_session_management' => (bool) Cache::get(
+                                'examiq.allow_hod_submission_session_management',
+                                (bool) config('examiq.allow_hod_submission_session_management', false)
+                            ),
+                            default => true,
+                        };
+                    @endphp
+                    @if (! $isVisible)
+                        @continue
+                    @endif
                     @php
                         $isDisabled = ! empty($item['disabled']);
                         if ($isDisabled) {

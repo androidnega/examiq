@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\SubmissionStatus;
 use App\Models\ExamSubmission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class HodDashboardController extends Controller
@@ -30,10 +29,6 @@ class HodDashboardController extends Controller
             'moderationInProgress' => $moderationInProgress,
             'underRevision' => $underRevision,
             'awaitingApproval' => $awaitingApproval,
-            'canManageSessionOptions' => (bool) Cache::get(
-                'examiq.allow_hod_submission_session_management',
-                (bool) config('examiq.allow_hod_submission_session_management', false)
-            ),
         ]);
     }
 }

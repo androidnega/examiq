@@ -31,16 +31,4 @@
             </div>
         </div>
     </div>
-
-    @if ($canManageSessionOptions ?? false)
-        <div class="mt-4 rounded-xl border border-slate-100 bg-white p-6">
-            <h2 class="text-sm font-bold text-slate-900">{{ __('Academic year & semester options') }}</h2>
-            <p class="mt-1 text-sm leading-relaxed text-slate-500">
-                {{ __('Manage centralized options used by lecturers in submission and revision forms.') }}
-            </p>
-            <div class="mt-4">
-                <x-button href="{{ route('dashboard.department.session-options.edit') }}" variant="secondary">{{ __('Manage options') }}</x-button>
-            </div>
-        </div>
-    @endif
 @endsection

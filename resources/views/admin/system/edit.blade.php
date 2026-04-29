@@ -151,14 +151,6 @@
                             </label>
                         </div>
 
-                        <div class="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                            <p class="text-sm font-medium text-slate-900">{{ __('Submission session options') }}</p>
-                            <p class="text-xs text-slate-500">{{ __('Define academic year and semester choices from one place.') }}</p>
-                            <div class="mt-2">
-                                <x-button href="{{ route('dashboard.system.session-options.edit') }}" variant="secondary">{{ __('Manage options') }}</x-button>
-                            </div>
-                        </div>
-
                         <div class="grid gap-4 md:grid-cols-2">
                             <div>
                                 <label for="sms_provider" class="block text-sm font-medium text-slate-700">{{ __('OTP SMS provider') }}</label>

@@ -46,6 +46,13 @@ return [
             'group' => 'Settings',
             'items' => [
                 ['label' => 'System Settings', 'route' => 'dashboard.system.edit', 'pattern' => 'dashboard.system.*', 'icon' => 'cog'],
+                [
+                    'label' => 'Academic Sessions',
+                    'route' => 'dashboard.system.session-options.edit',
+                    'pattern' => 'dashboard.system.session-options.*',
+                    'icon' => 'calendar',
+                    'visible_if' => 'super_admin',
+                ],
             ],
         ],
     ],
@@ -63,6 +70,13 @@ return [
                 ['label' => 'Exam submissions & assignments', 'route' => 'dashboard.department.index', 'pattern' => 'dashboard.department.*', 'icon' => 'folder'],
                 ['label' => 'Approval queue', 'route' => 'dashboard.approvals.index', 'pattern' => 'dashboard.approvals.*', 'icon' => 'check'],
                 ['label' => 'User accounts', 'route' => 'dashboard.department.users.index', 'pattern' => 'dashboard.department.users.*', 'icon' => 'users'],
+                [
+                    'label' => 'Academic Sessions',
+                    'route' => 'dashboard.department.session-options.edit',
+                    'pattern' => 'dashboard.department.session-options.*',
+                    'icon' => 'calendar',
+                    'visible_if' => 'hod_session_management',
+                ],
             ],
         ],
     ],
