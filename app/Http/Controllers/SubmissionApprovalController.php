@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\SubmissionStatus;
 use App\Http\Requests\RejectSubmissionRequest;
 use App\Models\ExamSubmission;
+use App\Models\SubmissionFile;
 use App\Services\Submissions\SubmissionApprovalService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubmissionApprovalController extends Controller
 {
@@ -56,6 +59,25 @@ class SubmissionApprovalController extends Controller
             'canApprove' => $request->user()->can('approve', $examSubmission),
             'canReject' => $request->user()->can('reject', $examSubmission),
         ]);
+    }
+
+    public function streamSubmissionFile(ExamSubmission $examSubmission, SubmissionFile $submissionFile): StreamedResponse
+    {
+        $this->authorize('view', $examSubmission);
+
+        abort_unless($submissionFile->submission_id === $examSubmission->getKey(), 404);
+
+        $disk = SubmissionFile::STORAGE_DISK;
+        abort_unless(Storage::disk($disk)->exists($submissionFile->file_path), 404);
+
+        return Storage::disk($disk)->response(
+            $submissionFile->file_path,
+            $submissionFile->original_name ?? 'document.pdf',
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="'.str_replace('"', '', $submissionFile->original_name ?? 'document.pdf').'"',
+            ]
+        );
     }
 
     public function approve(Request $request, ExamSubmission $examSubmission, SubmissionApprovalService $submissionApprovalService): RedirectResponse

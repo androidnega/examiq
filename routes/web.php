@@ -69,6 +69,7 @@ Route::middleware(['auth', 'not.blocked'])->group(function (): void {
             Route::post('/department/users/{user}/reset-password', [UserController::class, 'departmentResetPassword'])->name('dashboard.department.users.reset-password');
             Route::post('/department/assign-moderators', [ModerationAssignmentController::class, 'assignModerators'])->name('dashboard.department.assign-moderators');
             Route::get('/department/{examSubmission}', [SubmissionApprovalController::class, 'show'])->name('dashboard.department.show');
+            Route::get('/department/{examSubmission}/files/{submissionFile}', [SubmissionApprovalController::class, 'streamSubmissionFile'])->name('dashboard.department.files.show');
             Route::post('/department/{examSubmission}/approve', [SubmissionApprovalController::class, 'approve'])->name('dashboard.department.approve');
             Route::post('/department/{examSubmission}/reject', [SubmissionApprovalController::class, 'reject'])->name('dashboard.department.reject');
             Route::get('/department/session-options', [SubmissionSessionSettingsController::class, 'editForHod'])->name('dashboard.department.session-options.edit');

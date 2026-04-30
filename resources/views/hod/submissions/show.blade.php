@@ -39,7 +39,10 @@
                     <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500">{{ __('Version') }} {{ $version }}</h3>
                     <ul class="mt-2 space-y-1 text-sm text-gray-700">
                         @foreach ($files as $file)
-                            <li>{{ $file->type->label() }} — {{ $file->original_name ?? __('document') }}</li>
+                            <li class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
+                                <span>{{ $file->type->label() }} — {{ $file->original_name ?? __('document') }}</span>
+                                <x-button href="{{ route('dashboard.department.files.show', [$examSubmission, $file]) }}" variant="secondary">{{ __('Open PDF') }}</x-button>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
