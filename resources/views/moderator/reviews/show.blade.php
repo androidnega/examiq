@@ -69,109 +69,170 @@
             @endif
 
             @can('review', $examSubmission)
-                <form method="post" action="{{ route('dashboard.reviews.store', $examSubmission) }}" class="mt-5 space-y-4" data-form-wizard="true">
+                <form method="post" action="{{ route('dashboard.reviews.store', $examSubmission) }}" class="mt-5 space-y-6">
                     @csrf
-                    <p data-wizard-indicator class="text-xs font-semibold uppercase tracking-wide text-gray-500"></p>
-                    <div data-wizard-step class="space-y-4">
-                        <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700">{{ __('Outcome') }}</label>
-                            <select id="status" name="status" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                                <option value="">{{ __('Select…') }}</option>
-                                <option value="accepted" @selected(old('status', $moderationReview?->status->value) === 'accepted')>{{ __('Accepted') }}</option>
-                                <option value="minor_changes" @selected(old('status', $moderationReview?->status->value) === 'minor_changes')>{{ __('Minor changes') }}</option>
-                                <option value="major_changes" @selected(old('status', $moderationReview?->status->value) === 'major_changes')>{{ __('Major changes') }}</option>
-                                <option value="rejected" @selected(old('status', $moderationReview?->status->value) === 'rejected')>{{ __('Rejected') }}</option>
-                            </select>
-                            @error('status')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                    <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <h3 class="text-sm font-semibold text-gray-900">{{ __('Section A: Information about the question') }}</h3>
+                        <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Name of Department') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $examSubmission->course?->department?->name ?? __('N/A') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Programme') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $examSubmission->course?->program ?? __('N/A') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Course title') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $examSubmission->course?->name ?? __('N/A') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Academic year') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $examSubmission->academic_year }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Semester') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ str((string) $examSubmission->semester)->title() }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">{{ __('Name of Lecturer') }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $examSubmission->lecturer?->name ?? __('N/A') }}</p>
+                            </div>
+                            <div>
+                                <label for="question_count_section_a" class="block text-sm font-medium text-gray-700">{{ __('Number of questions (Section A)') }}</label>
+                                <input id="question_count_section_a" type="number" min="0" name="question_count_section_a" value="{{ old('question_count_section_a', $moderationReview?->question_count_section_a) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                            <div>
+                                <label for="question_count_section_b" class="block text-sm font-medium text-gray-700">{{ __('Number of questions (Section B)') }}</label>
+                                <input id="question_count_section_b" type="number" min="0" name="question_count_section_b" value="{{ old('question_count_section_b', $moderationReview?->question_count_section_b) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                            <div>
+                                <label for="question_count_section_c" class="block text-sm font-medium text-gray-700">{{ __('Number of questions (Section C)') }}</label>
+                                <input id="question_count_section_c" type="number" min="0" name="question_count_section_c" value="{{ old('question_count_section_c', $moderationReview?->question_count_section_c) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
                         </div>
-                        <div>
-                            <label for="feedback" class="block text-sm font-medium text-gray-700">{{ __('Feedback') }}</label>
-                            <textarea id="feedback" name="feedback" rows="4" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" placeholder="{{ __('Required unless the outcome is Accepted.') }}">{{ old('feedback', $moderationReview?->feedback) }}</textarea>
-                            @error('feedback')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                        <div class="mt-3 max-w-sm">
+                            <label for="paper_duration" class="block text-sm font-medium text-gray-700">{{ __('Duration of paper') }}</label>
+                            <input id="paper_duration" type="text" name="paper_duration" value="{{ old('paper_duration', $moderationReview?->paper_duration) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" placeholder="{{ __('e.g. 2.5 Hrs') }}" />
                         </div>
-                        <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
-                            <h3 class="text-sm font-semibold text-gray-900">{{ __('Moderation rubric') }}</h3>
-                            <p class="mt-1 text-xs text-gray-500">{{ __('Select grades A-E for each rubric item.') }}</p>
-                            <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                                @foreach (range(1, 11) as $rubricIndex)
-                                    @php($field = 'rubric_'.$rubricIndex.'_grade')
-                                    <div>
-                                        <label for="{{ $field }}" class="block text-xs font-medium text-gray-700">{{ __('Rubric item :n', ['n' => $rubricIndex]) }}</label>
-                                        <select id="{{ $field }}" name="{{ $field }}" required class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                                            <option value="">{{ __('Select grade') }}</option>
-                                            @foreach (['A', 'B', 'C', 'D', 'E'] as $grade)
-                                                <option value="{{ $grade }}" @selected(old($field, $moderationReview?->{$field}) === $grade)>{{ $grade }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error($field)
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                        @enderror
-                                    </div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <h3 class="text-sm font-semibold text-gray-900">{{ __('Section B: Assessment of the question paper') }}</h3>
+                        <p class="mt-1 text-xs text-gray-500">{{ __('Grading scale: A=70-100, B=60-69, C=50-59, D=40-49, E=0-39') }}</p>
+                        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                            @php
+                                $rubricLabels = [
+                                    1 => __('Representative samples'),
+                                    2 => __('Learning outcomes'),
+                                    3 => __('Syllabus coverage'),
+                                    4 => __('Clarity'),
+                                    5 => __('Unambiguous language'),
+                                    6 => __('Difficulty level'),
+                                    7 => __('Format/length'),
+                                    8 => __('QA guidelines'),
+                                ];
+                            @endphp
+                            @foreach (range(1, 8) as $rubricIndex)
+                                @php($field = 'rubric_'.$rubricIndex.'_grade')
+                                <div>
+                                    <label for="{{ $field }}" class="block text-xs font-medium text-gray-700">{{ $rubricLabels[$rubricIndex] }}</label>
+                                    <select id="{{ $field }}" name="{{ $field }}" required class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm">
+                                        <option value="">{{ __('Select grade') }}</option>
+                                        @foreach (['A', 'B', 'C', 'D', 'E'] as $grade)
+                                            <option value="{{ $grade }}" @selected(old($field, $moderationReview?->{$field}) === $grade)>{{ $grade }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                            <div>
+                                <label for="recommend_accept_questions" class="block text-sm font-medium text-gray-700">{{ __('Accepted questions') }}</label>
+                                <input id="recommend_accept_questions" type="text" name="recommend_accept_questions" value="{{ old('recommend_accept_questions', $moderationReview?->recommend_accept_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                            <div>
+                                <label for="recommend_reject_questions" class="block text-sm font-medium text-gray-700">{{ __('Rejected questions') }}</label>
+                                <input id="recommend_reject_questions" type="text" name="recommend_reject_questions" value="{{ old('recommend_reject_questions', $moderationReview?->recommend_reject_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                            <div>
+                                <label for="recommend_reset_questions" class="block text-sm font-medium text-gray-700">{{ __('Re-set questions') }}</label>
+                                <input id="recommend_reset_questions" type="text" name="recommend_reset_questions" value="{{ old('recommend_reset_questions', $moderationReview?->recommend_reset_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label for="question_paper_comments" class="block text-sm font-medium text-gray-700">{{ __('Other comments (question paper)') }}</label>
+                            <textarea id="question_paper_comments" name="question_paper_comments" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">{{ old('question_paper_comments', $moderationReview?->question_paper_comments) }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <h3 class="text-sm font-semibold text-gray-900">{{ __('Section C: Marking scheme') }}</h3>
+                        <p class="mt-1 text-xs text-gray-500">{{ __('Evaluate solution guide and mark allocations.') }}</p>
+                        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                            @foreach (range(9, 11) as $rubricIndex)
+                                @php($field = 'rubric_'.$rubricIndex.'_grade')
+                                <div>
+                                    <label for="{{ $field }}" class="block text-xs font-medium text-gray-700">
+                                        {{ match ($rubricIndex) {
+                                            9 => __('Syllabus correspondence'),
+                                            10 => __('Intention/knowledge'),
+                                            11 => __('Mark distribution'),
+                                        } }}
+                                    </label>
+                                    <select id="{{ $field }}" name="{{ $field }}" required class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm">
+                                        <option value="">{{ __('Select grade') }}</option>
+                                        @foreach (['A', 'B', 'C', 'D', 'E'] as $grade)
+                                            <option value="{{ $grade }}" @selected(old($field, $moderationReview?->{$field}) === $grade)>{{ $grade }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="mt-3">
+                            <label for="marking_scheme_comments" class="block text-sm font-medium text-gray-700">{{ __('Other comments (marking scheme)') }}</label>
+                            <textarea id="marking_scheme_comments" name="marking_scheme_comments" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">{{ old('marking_scheme_comments', $moderationReview?->marking_scheme_comments) }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <h3 class="text-sm font-semibold text-gray-900">{{ __('Section D: Final assessment and sign-off') }}</h3>
+                        <div class="mt-4">
+                            <p class="text-sm font-medium text-gray-700">{{ __('General assessment (question paper)') }}</p>
+                            @php($questionAssessments = old('question_paper_assessments', $moderationReview?->question_paper_assessments ?? []))
+                            <div class="mt-2 space-y-2 text-sm text-gray-700">
+                                @foreach ([
+                                    'accepted_without_corrections' => __('Question paper accepted without any corrections/modifications.'),
+                                    'accepted_minor_corrections' => __('Question paper accepted with minor corrections as indicated on the paper.'),
+                                    'accepted_with_modifications' => __('Question paper accepted with some modifications as indicated.'),
+                                    'rejected_new_questions' => __('Question paper rejected and new questions to be set.'),
+                                ] as $value => $label)
+                                    <label class="flex items-start gap-2">
+                                        <input type="checkbox" name="question_paper_assessments[]" value="{{ $value }}" @checked(in_array($value, is_array($questionAssessments) ? $questionAssessments : [], true)) class="mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-300" />
+                                        <span>{{ $label }}</span>
+                                    </label>
                                 @endforeach
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                            <x-button type="button" variant="primary" data-wizard-next>{{ __('Next') }}</x-button>
-                            <x-button href="{{ route('dashboard.reviews.index') }}" variant="secondary">{{ __('Back') }}</x-button>
-                        </div>
-                    </div>
-
-                    <div data-wizard-step class="hidden space-y-4">
-                        <div class="grid gap-4 sm:grid-cols-3">
-                            <div>
-                                <label for="recommend_accept_questions" class="block text-sm font-medium text-gray-700">{{ __('Question numbers to accept') }}</label>
-                                <input id="recommend_accept_questions" type="text" name="recommend_accept_questions" value="{{ old('recommend_accept_questions', $moderationReview?->recommend_accept_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" placeholder="{{ __('e.g. all or 1,2,3') }}" />
-                            </div>
-                            <div>
-                                <label for="recommend_reject_questions" class="block text-sm font-medium text-gray-700">{{ __('Question numbers to reject') }}</label>
-                                <input id="recommend_reject_questions" type="text" name="recommend_reject_questions" value="{{ old('recommend_reject_questions', $moderationReview?->recommend_reject_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" />
-                            </div>
-                            <div>
-                                <label for="recommend_reset_questions" class="block text-sm font-medium text-gray-700">{{ __('Question numbers to re-set') }}</label>
-                                <input id="recommend_reset_questions" type="text" name="recommend_reset_questions" value="{{ old('recommend_reset_questions', $moderationReview?->recommend_reset_questions) }}" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" />
+                        <div class="mt-4">
+                            <p class="text-sm font-medium text-gray-700">{{ __('General assessment (marking scheme)') }}</p>
+                            @php($schemeAssessments = old('marking_scheme_assessments', $moderationReview?->marking_scheme_assessments ?? []))
+                            <div class="mt-2 space-y-2 text-sm text-gray-700">
+                                @foreach ([
+                                    'accepted_all' => __('Marking scheme accepted for all questions.'),
+                                    'to_be_reprepared' => __('Marking scheme to be re-prepared according to comments.'),
+                                ] as $value => $label)
+                                    <label class="flex items-start gap-2">
+                                        <input type="checkbox" name="marking_scheme_assessments[]" value="{{ $value }}" @checked(in_array($value, is_array($schemeAssessments) ? $schemeAssessments : [], true)) class="mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-300" />
+                                        <span>{{ $label }}</span>
+                                    </label>
+                                @endforeach
                             </div>
                         </div>
-                        <div>
-                            <label for="question_paper_comments" class="block text-sm font-medium text-gray-700">{{ __('Question paper comments') }}</label>
-                            <textarea id="question_paper_comments" name="question_paper_comments" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">{{ old('question_paper_comments', $moderationReview?->question_paper_comments) }}</textarea>
-                        </div>
-                        <div>
-                            <label for="marking_scheme_comments" class="block text-sm font-medium text-gray-700">{{ __('Marking scheme comments') }}</label>
-                            <textarea id="marking_scheme_comments" name="marking_scheme_comments" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">{{ old('marking_scheme_comments', $moderationReview?->marking_scheme_comments) }}</textarea>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <x-button type="button" variant="secondary" data-wizard-prev>{{ __('Back') }}</x-button>
-                            <x-button type="button" variant="primary" data-wizard-next>{{ __('Next') }}</x-button>
-                        </div>
-                    </div>
-
-                    <div data-wizard-step class="hidden space-y-4">
-                        <div class="grid gap-4 sm:grid-cols-3">
-                            <div>
-                                <label for="question_paper_assessment" class="block text-sm font-medium text-gray-700">{{ __('Question paper assessment') }}</label>
-                                <select id="question_paper_assessment" name="question_paper_assessment" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                                    <option value="">{{ __('Select...') }}</option>
-                                    <option value="accepted_without_corrections" @selected(old('question_paper_assessment', $moderationReview?->question_paper_assessment) === 'accepted_without_corrections')>{{ __('Accepted without corrections') }}</option>
-                                    <option value="accepted_minor_corrections" @selected(old('question_paper_assessment', $moderationReview?->question_paper_assessment) === 'accepted_minor_corrections')>{{ __('Accepted with minor corrections') }}</option>
-                                    <option value="accepted_with_modifications" @selected(old('question_paper_assessment', $moderationReview?->question_paper_assessment) === 'accepted_with_modifications')>{{ __('Accepted with some modifications') }}</option>
-                                    <option value="rejected_new_questions" @selected(old('question_paper_assessment', $moderationReview?->question_paper_assessment) === 'rejected_new_questions')>{{ __('Rejected and new questions to be set') }}</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="marking_scheme_assessment" class="block text-sm font-medium text-gray-700">{{ __('Marking scheme assessment') }}</label>
-                                <select id="marking_scheme_assessment" name="marking_scheme_assessment" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                                    <option value="">{{ __('Select...') }}</option>
-                                    <option value="accepted_all" @selected(old('marking_scheme_assessment', $moderationReview?->marking_scheme_assessment) === 'accepted_all')>{{ __('Accepted for all questions') }}</option>
-                                    <option value="to_be_reprepared" @selected(old('marking_scheme_assessment', $moderationReview?->marking_scheme_assessment) === 'to_be_reprepared')>{{ __('To be re-prepared according to comments') }}</option>
-                                </select>
-                            </div>
+                        <div class="mt-4 grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label for="overall_rating" class="block text-sm font-medium text-gray-700">{{ __('Overall rating') }}</label>
-                                <select id="overall_rating" name="overall_rating" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                                <select id="overall_rating" name="overall_rating" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
                                     <option value="">{{ __('Select...') }}</option>
                                     <option value="excellent" @selected(old('overall_rating', $moderationReview?->overall_rating) === 'excellent')>{{ __('Excellent') }}</option>
                                     <option value="very_good" @selected(old('overall_rating', $moderationReview?->overall_rating) === 'very_good')>{{ __('Very Good') }}</option>
@@ -180,28 +241,49 @@
                                     <option value="unsatisfactory" @selected(old('overall_rating', $moderationReview?->overall_rating) === 'unsatisfactory')>{{ __('Unsatisfactory') }}</option>
                                 </select>
                             </div>
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700">{{ __('Outcome') }}</label>
+                                <select id="status" name="status" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
+                                    <option value="">{{ __('Select…') }}</option>
+                                    <option value="accepted" @selected(old('status', $moderationReview?->status->value) === 'accepted')>{{ __('Accepted') }}</option>
+                                    <option value="minor_changes" @selected(old('status', $moderationReview?->status->value) === 'minor_changes')>{{ __('Minor changes') }}</option>
+                                    <option value="major_changes" @selected(old('status', $moderationReview?->status->value) === 'major_changes')>{{ __('Major changes') }}</option>
+                                    <option value="rejected" @selected(old('status', $moderationReview?->status->value) === 'rejected')>{{ __('Rejected') }}</option>
+                                </select>
+                            </div>
                         </div>
-                        <div>
+                        <div class="mt-3">
+                            <label for="feedback" class="block text-sm font-medium text-gray-700">{{ __('Feedback') }}</label>
+                            <textarea id="feedback" name="feedback" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" placeholder="{{ __('Required unless the outcome is Accepted.') }}">{{ old('feedback', $moderationReview?->feedback) }}</textarea>
+                        </div>
+                        <div class="mt-3">
                             <label for="improvement_comments" class="block text-sm font-medium text-gray-700">{{ __('Further comments for improvement') }}</label>
-                            <textarea id="improvement_comments" name="improvement_comments" rows="3" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200">{{ old('improvement_comments', $moderationReview?->improvement_comments) }}</textarea>
+                            <textarea id="improvement_comments" name="improvement_comments" rows="4" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">{{ old('improvement_comments', $moderationReview?->improvement_comments) }}</textarea>
                         </div>
-                        <div>
-                            <label for="moderated_on" class="block text-sm font-medium text-gray-700">{{ __('Moderation date') }}</label>
-                            <input id="moderated_on" type="date" name="moderated_on" value="{{ old('moderated_on', optional($moderationReview?->moderated_on)->format('Y-m-d')) }}" required class="mt-1 w-full max-w-xs rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" />
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <x-button type="button" variant="secondary" data-wizard-prev>{{ __('Back') }}</x-button>
-                            <x-button type="submit" variant="primary">{{ __('Submit review') }}</x-button>
-                            <x-button href="{{ route('dashboard.reviews.index') }}" variant="secondary">{{ __('Cancel') }}</x-button>
+                        <div class="mt-3 grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label for="moderator_signature_name" class="block text-sm font-medium text-gray-700">{{ __('Signature of internal moderator (name)') }}</label>
+                                <input id="moderator_signature_name" type="text" name="moderator_signature_name" value="{{ old('moderator_signature_name', $moderationReview?->moderator_signature_name ?? auth()->user()?->name) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
+                            <div>
+                                <label for="moderated_on" class="block text-sm font-medium text-gray-700">{{ __('Date') }}</label>
+                                <input id="moderated_on" type="date" name="moderated_on" value="{{ old('moderated_on', optional($moderationReview?->moderated_on)->format('Y-m-d')) }}" required class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 text-sm" />
+                            </div>
                         </div>
                     </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        <x-button type="submit" variant="primary">{{ __('Submit review') }}</x-button>
+                        <x-button href="{{ route('dashboard.reviews.index') }}" variant="secondary">{{ __('Back') }}</x-button>
+                    </div>
                 </form>
-            @else
+            @endcan
+            @cannot('review', $examSubmission)
                 <p class="mt-5 text-sm text-gray-500">{{ __('This submission is not open for moderation updates from your account right now.') }}</p>
                 <div class="mt-4">
                     <x-button href="{{ route('dashboard.reviews.index') }}" variant="secondary">{{ __('Back') }}</x-button>
                 </div>
-            @endcan
+            @endcannot
         </div>
     </div>
 @endsection

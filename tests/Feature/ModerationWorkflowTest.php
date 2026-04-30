@@ -88,16 +88,23 @@ class ModerationWorkflowTest extends TestCase
             'rubric_9_grade' => 'B',
             'rubric_10_grade' => 'B',
             'rubric_11_grade' => 'B',
+            'question_count_section_a' => 2,
+            'question_count_section_b' => 3,
+            'question_count_section_c' => 1,
+            'paper_duration' => '2.5 Hrs',
             'recommend_accept_questions' => 'All',
             'recommend_reject_questions' => '',
             'recommend_reset_questions' => '',
             'question_paper_comments' => 'Section numbering updated.',
             'marking_scheme_comments' => 'Aligned with question sections.',
             'question_paper_assessment' => 'accepted_minor_corrections',
+            'question_paper_assessments' => ['accepted_minor_corrections'],
             'marking_scheme_assessment' => 'accepted_all',
+            'marking_scheme_assessments' => ['accepted_all'],
             'overall_rating' => 'very_good',
             'improvement_comments' => 'Good overall.',
             'moderated_on' => '2026-04-29',
+            'moderator_signature_name' => 'Moderator User',
         ];
     }
 

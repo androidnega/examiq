@@ -24,16 +24,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'rubric_9_grade',
     'rubric_10_grade',
     'rubric_11_grade',
+    'question_count_section_a',
+    'question_count_section_b',
+    'question_count_section_c',
+    'paper_duration',
     'recommend_accept_questions',
     'recommend_reject_questions',
     'recommend_reset_questions',
     'question_paper_comments',
     'marking_scheme_comments',
     'question_paper_assessment',
+    'question_paper_assessments',
     'marking_scheme_assessment',
+    'marking_scheme_assessments',
     'overall_rating',
     'improvement_comments',
     'moderated_on',
+    'moderator_signature_name',
 ])]
 class Moderation extends Model
 {
@@ -44,6 +51,8 @@ class Moderation extends Model
         return [
             'status' => ModerationStatus::class,
             'moderated_on' => 'date',
+            'question_paper_assessments' => 'array',
+            'marking_scheme_assessments' => 'array',
         ];
     }
 
